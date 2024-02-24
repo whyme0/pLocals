@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pLocals", "pLocals.csproj", "{7F51FD05-AD48-4DFA-8B49-AD9BA3C61B8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pLocals.Repository", "..\Repository\pLocals.Repository.csproj", "{001C31AA-3578-4DFC-A262-7F473E27E830}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "..\Repository\Repository.csproj", "{001C31AA-3578-4DFC-A262-7F473E27E830}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

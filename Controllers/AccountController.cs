@@ -18,5 +18,22 @@ namespace pLocals.Controllers
             _logger = logger;
             _context = appDbContext;
         }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(AccountDTO account)
+        {
+            Account a = new Account() { 
+                Title = account.Title,
+                Login = account.Login,
+                Password = account.Password,
+                Notes = account.Notes
+            };
+            
+            _context.Accounts.Add(a);
+            
+            await _context.SaveChangesAsync();
+            
+            return Content(new Account());
+        }
     }
 }

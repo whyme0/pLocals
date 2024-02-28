@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using pLocals.Data;
+using pLocals.Models;
+using pLocals.Repository;
+using pLocals.Repository.Abstract;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<RepositoryBase<Account>, AccountRepository>();
 
 builder.Services.AddLogging(b =>
     b.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning));

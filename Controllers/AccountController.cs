@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using pLocals.Data;
 using pLocals.Models;
+using pLocals.Repository;
 
 namespace pLocals.Controllers
 {
@@ -12,11 +13,13 @@ namespace pLocals.Controllers
 
         private readonly ILogger<AccountController> _logger;
         private readonly AppDbContext _context;
+        private readonly AccountRepository _accRepository;
 
-        public AccountController(ILogger<AccountController> logger, AppDbContext appDbContext)
+        public AccountController(ILogger<AccountController> logger, AccountRepository accountRepository, AppDbContext context)
         {
             _logger = logger;
-            _context = appDbContext;
+            _accRepository = accountRepository;
+            _context = context;
         }
 
         [HttpPost]
@@ -28,12 +31,12 @@ namespace pLocals.Controllers
                 Password = account.Password,
                 Notes = account.Notes
             };
-            
-            _context.Accounts.Add(a);
+
+            _accRepository.Create(a);
             
             await _context.SaveChangesAsync();
             
-            return Content(new Account());
+            return Content();
         }
     }
 }

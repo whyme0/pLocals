@@ -4,12 +4,18 @@ namespace pLocals.Models.DTOs
 {
     public class AccountDTO
     {
-        public virtual ICollection<Note> Notes { get; set; } = new HashSet<Note>();
+        public Note? Note { get; set; }
+        
         [DataType(DataType.Text)]
+        [Required]
         public string? Title { get; set; }
+        
         [DataType(DataType.Text)]
+        [Required]
         public string? Login { get; set; }
+        
         [DataType(DataType.Password)]
+        [Required]
         public string? Password { get; set; }
     }
 }

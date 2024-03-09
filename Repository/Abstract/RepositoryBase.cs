@@ -20,9 +20,9 @@ namespace pLocals.Repository.Abstract
             context.Set<T>().Remove(entity);
         }
 
-        public IQueryable<T> Find(Expression<Func<T, T>> expression)
+        public IQueryable<T> Find(Expression<Func<T, bool>> expression)
         {
-            return context.Set<T>().Select(expression);
+            return context.Set<T>().Where(expression);
         }
 
         public void Update(T entity)

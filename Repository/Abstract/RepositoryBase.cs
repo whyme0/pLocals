@@ -25,6 +25,11 @@ namespace pLocals.Repository.Abstract
             return context.Set<T>().Where(expression);
         }
 
+        public IQueryable<T> FindAll()
+        {
+            return context.Set<T>();
+        }
+
         public void Update(T entity)
         {
             context.Set<T>().Update(entity);

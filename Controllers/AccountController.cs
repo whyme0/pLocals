@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using pLocals.Data;
 using pLocals.Models;
+using pLocals.Models.DTOs;
 using pLocals.Repository;
 
 namespace pLocals.Controllers
@@ -22,6 +22,24 @@ namespace pLocals.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public ICollection<Account> Get()
+        {
+            return _accRepository.FindAll().ToList();
+        }
+
+        [HttpGet]
+        public Account? Get(int id)
+        {
+            return _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
+        }
+
+        [HttpGet]
+        public Account? Get(string title)
+        {
+            return _accRepository.Find(a => a.Title == title).FirstOrDefault();
+        }
+
         [HttpPost]
         public async Task<ActionResult> Create(AccountDTO account)
         {
@@ -29,14 +47,40 @@ namespace pLocals.Controllers
                 Title = account.Title,
                 Login = account.Login,
                 Password = account.Password,
-                Notes = account.Notes
+                Note = account.Note
             };
 
             _accRepository.Create(a);
             
             await _context.SaveChangesAsync();
             
-            return Content();
+            return Created();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(int id)
+        {
+            Account? a = _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
+
+            if (a == null)
+                return NotFound();
+           
+            _accRepository.Delete(a);
+            
+            await _context.SaveChangesAsync();
+            
+            return Content("Account successfully deleted");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Update(int id, AccountDTO accountDTO)
+        {
+            Account? a = _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
+            if (a == null)
+                return NotFound();
+            
+            _accRepository.Update(a);
+            return Ok("Updated");
         }
     }
 }

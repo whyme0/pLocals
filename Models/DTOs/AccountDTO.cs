@@ -4,8 +4,9 @@ namespace pLocals.Models.DTOs
 {
     public class AccountDTO
     {
-        public Note? Note { get; set; }
-        
+        [DataType(DataType.MultilineText)]
+        public string? NoteText { get; set; }
+
         [DataType(DataType.Text)]
         public string? Title { get; set; }
         

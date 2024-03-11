@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<RepositoryBase<Account>, AccountRepository>();
+builder.Services.AddScoped<AccountRepository>();
 
 builder.Services.AddLogging(b =>
     b.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning));

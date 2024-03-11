@@ -7,7 +7,7 @@ using pLocals.Repository;
 namespace pLocals.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class AccountController : ControllerBase
     {
 
@@ -23,18 +23,22 @@ namespace pLocals.Controllers
         }
 
         [HttpGet]
+        [Route("get")]
         public ICollection<Account> Get()
         {
+            Console.WriteLine("/account/get called");
             return _accRepository.FindAll().ToList();
         }
 
         [HttpGet]
+        [Route("get/{id:int}")]
         public Account? Get(int id)
         {
             return _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
         }
 
         [HttpGet]
+        [Route("get/{title}")]
         public Account? Get(string title)
         {
             return _accRepository.Find(a => a.Title == title).FirstOrDefault();

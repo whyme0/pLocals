@@ -26,25 +26,31 @@ namespace pLocals.Controllers
         [Route("get")]
         public ICollection<Account> Get()
         {
-            Console.WriteLine("/account/get called");
             return _accRepository.FindAll().ToList();
         }
 
         [HttpGet]
         [Route("get/{id:int}")]
-        public Account? Get(int id)
+        public ActionResult<Account> Get(int id)
         {
-            return _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
+            Account? acc = _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
+            if (acc == null)
+                return NotFound($"Account with '{id}' id cannot be found");
+            return acc;
         }
 
         [HttpGet]
         [Route("get/{title}")]
-        public Account? Get(string title)
+        public ActionResult<Account> Get(string title)
         {
-            return _accRepository.Find(a => a.Title == title).FirstOrDefault();
+            Account? acc = _accRepository.Find(a => a.Title == title).FirstOrDefault();
+            if (acc == null)
+                return NotFound($"Account with '{title}' title cannot be found");
+            return acc;
         }
 
         [HttpPost]
+        [Route("create")]
         public async Task<ActionResult> Create(AccountDTO account)
         {
             Account a = new Account() { 
@@ -62,6 +68,7 @@ namespace pLocals.Controllers
         }
 
         [HttpPost]
+        [Route("delete/{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             Account? a = _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
@@ -77,7 +84,8 @@ namespace pLocals.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Update(int id, AccountDTO accountDTO)
+        [Route("update/{id}")]
+        public async Task<ActionResult> Update(int id, [FromBody] AccountDTO accountDTO)
         {
             Account? a = _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
             if (a == null)

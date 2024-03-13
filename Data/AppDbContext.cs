@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using pLocals.Models;
+using System.Reflection.Metadata;
 
 namespace pLocals.Data
 {
@@ -11,6 +12,12 @@ namespace pLocals.Data
         }
 
         public DbSet<Account> Accounts { get; set; } = null!;
-        public DbSet<Note> Notes { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Account>()
+                .HasIndex(a => a.Title)
+                .IsUnique();
+        }
     }
 }

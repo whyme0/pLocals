@@ -18,6 +18,15 @@ namespace pLocals.Data
             modelBuilder.Entity<Account>()
                 .HasIndex(a => a.Title)
                 .IsUnique();
+            modelBuilder.Entity<Account>()
+                .Property(a => a.Title)
+                .IsRequired();
+            modelBuilder.Entity<Account>()
+                .Property(a => a.Login)
+                .IsRequired();
+            modelBuilder.Entity<Account>()
+                .Property(a => a.Password)
+                .IsRequired();
         }
     }
 }

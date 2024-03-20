@@ -85,7 +85,7 @@ namespace pLocals.Controllers
 
         [HttpPost]
         [Route("update/{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] AccountDTO accountDTO)
+        public ActionResult Update(int id, [FromBody] UpdateAccountDTO accountDTO)
         {
             Account? a = _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
             if (a == null)

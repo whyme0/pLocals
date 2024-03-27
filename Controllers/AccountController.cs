@@ -51,13 +51,13 @@ namespace pLocals.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<ActionResult> Create(AccountDTO account)
+        public async Task<ActionResult> Create(CreateAccountDTO account)
         {
             Account a = new Account() { 
                 Title = account.Title,
                 Login = account.Login,
                 Password = account.Password,
-                Note = account.Note
+                NoteText = account.NoteText
             };
 
             _accRepository.Create(a);
@@ -67,7 +67,7 @@ namespace pLocals.Controllers
             return Created();
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("delete/{id}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -83,15 +83,23 @@ namespace pLocals.Controllers
             return Content("Account successfully deleted");
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("update/{id}")]
-        public ActionResult Update(int id, [FromBody] UpdateAccountDTO accountDTO)
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateAccountDTO accountDTO)
         {
             Account? a = _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
-            if (a == null)
-                return NotFound();
             
+            if (a == null) return NotFound();
+
+            if (accountDTO.Title != null) a.Title = accountDTO.Title;
+            if (accountDTO.Login != null) a.Login = accountDTO.Login;
+            if (accountDTO.Password != null) a.Password = accountDTO.Password;
+            if (accountDTO.NoteText != null) a.NoteText = accountDTO.NoteText;
+
             _accRepository.Update(a);
+
+            _context.SaveChanges();
+
             return Ok("Updated");
         }
     }

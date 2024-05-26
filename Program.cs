@@ -1,34 +1,57 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 using pLocals.Data;
 using pLocals.Models;
 using pLocals.Repository;
 using pLocals.Repository.Abstract;
 
-var builder = WebApplication.CreateBuilder(args);
+// Add logger
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning)
+    .WriteTo.Console(
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-
-builder.Services.AddDbContext<AppDbContext>(o =>
+try
 {
-    o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+    Log.Information("Start web application.");
 
-builder.Services.AddScoped<AccountRepository>();
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddLogging(b =>
-    b.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning));
+    // Add logger
+    //obj.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning));
+    builder.Services.AddSerilog();
 
-var app = builder.Build();
+    // Add services to the container.
+    builder.Services.AddControllers();
 
-// Configure the HTTP request pipeline.
+    // Add database settings
+    builder.Services.AddDbContext<AppDbContext>(o =>
+    {
+        o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    });
+        builder.Services.AddScoped<AccountRepository>();
 
-app.UseHttpsRedirection();
+    
 
-app.UseAuthorization();
+    var app = builder.Build();
 
-app.MapControllers();
+    // Configure the HTTP request pipeline.
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
 
-app.Run();
+    app.MapControllers();
+
+    app.Run();
+
+}
+catch (Exception e)
+{
+    Log.Fatal(e, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.Information("End web application.");
+    Log.CloseAndFlush();
+}

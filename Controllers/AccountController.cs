@@ -80,7 +80,7 @@ namespace pLocals.Controllers
             
             await _context.SaveChangesAsync();
             
-            return Content("Account successfully deleted");
+            return Accepted("Account successfully deleted");
         }
 
         [HttpPut]

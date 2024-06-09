@@ -36,6 +36,26 @@ try
     
 
     var app = builder.Build();
+    // What to do when applications started
+    app.Lifetime.ApplicationStarted.Register(() =>
+    {
+        using (IServiceScope scope = app.Services.CreateScope())
+        {
+            AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            dbContext.Database.EnsureCreated();
+            Log.Information("Databased created");
+        }
+    });
+    // What to do when applictions stopped
+    app.Lifetime.ApplicationStopping.Register(() =>
+    {
+        using (IServiceScope scope = app.Services.CreateScope())
+        {
+            AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            dbContext.Database.EnsureDeleted();
+            Log.Information("Databased deleted");
+        }
+    });
 
     // Configure the HTTP request pipeline.
     app.UseHttpsRedirection();

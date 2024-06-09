@@ -33,9 +33,9 @@ namespace pLocals.Controllers
         [Route("get/{id:int}")]
         public ActionResult<Account> Get(int id)
         {
-            Account? acc = _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
+            Account? acc = _accRepository.Find(a => a.Id == id).FirstOrDefault();
             if (acc == null)
-                return NotFound($"Account with '{id}' id cannot be found");
+                return NotFound($"Account with id '{id}' cannot be found");
             return acc;
         }
 
@@ -45,7 +45,7 @@ namespace pLocals.Controllers
         {
             Account? acc = _accRepository.Find(a => a.Title == title).FirstOrDefault();
             if (acc == null)
-                return NotFound($"Account with '{title}' title cannot be found");
+                return NotFound($"Account with title '{title}' cannot be found");
             return acc;
         }
 
@@ -71,7 +71,7 @@ namespace pLocals.Controllers
         [Route("delete/{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            Account? a = _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
+            Account? a = _accRepository.Find(a => a.Id == id).FirstOrDefault();
 
             if (a == null)
                 return NotFound();
@@ -87,7 +87,7 @@ namespace pLocals.Controllers
         [Route("update/{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] UpdateAccountDTO accountDTO)
         {
-            Account? a = _accRepository.Find(a => a.AccountId == id).FirstOrDefault();
+            Account? a = _accRepository.Find(a => a.Id == id).FirstOrDefault();
             
             if (a == null) return NotFound();
 

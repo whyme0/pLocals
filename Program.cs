@@ -31,9 +31,7 @@ try
     {
         o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
-        builder.Services.AddScoped<AccountRepository>();
-
-    
+        builder.Services.AddScoped<AccountRepository>();   
 
     var app = builder.Build();
     // What to do when applications started

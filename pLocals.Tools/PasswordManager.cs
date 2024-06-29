@@ -2,9 +2,9 @@
 {
     public class PasswordManager
     {
-        private Random rnd = new Random();
-        public string GeneratePassword(int length, bool withUppercase = true, bool withSpecialChars = true)
+        public string GeneratePassword(int length, bool withUppercase = false, bool withSpecialChars = false)
         {
+
             string initialCharsInString = "qwertyuiopasdfghjklzxcvbnm123456789";
             string uppercase = "QWERTYUIOPASDFGHJKLZXCVBNM";
             string specials = "~`!@#$%^&*()_+№?-=";
@@ -18,7 +18,7 @@
             char[] outputChars = new char[length];
             for (int i = 0; i < length; i++)
             {
-                int randomlyGeneratedNumber = rnd.Next(initialChars.Length);
+                int randomlyGeneratedNumber = new Random().Next(initialChars.Length);
                 outputChars[i] = initialChars[randomlyGeneratedNumber];
             }
             return new string(outputChars);

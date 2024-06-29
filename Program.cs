@@ -70,6 +70,7 @@ catch (Exception e)
 }
 finally
 {
+    
     Log.Information("End web application.");
     Log.CloseAndFlush();
 }

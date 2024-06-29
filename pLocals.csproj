@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\pLocals.Tools\pLocals.Tools.csproj" />
+    <ProjectReference Include="pLocals.Tools\pLocals.Tools.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using pLocals.Models.DTOs;
 using pLocals.Tools;
-using System.Collections;
 using System.Text.Json;
 
 namespace pLocals.Controllers

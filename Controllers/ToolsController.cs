@@ -22,6 +22,9 @@ namespace pLocals.Controllers
         [Route("generate-pwd/")]
         public IActionResult GeneratePassword([FromQuery] int length, bool withUppercase = true, bool withSpecials = true)
         {
+            if (length < 1)
+                return BadRequest("Cannot generate password with length of " + length);
+
             var output = new GeneratedPassword() { Password = _passwordManager.GeneratePassword(length, withUppercase, withSpecials) };
 
             return Content(JsonSerializer.Serialize(output), "application/json");

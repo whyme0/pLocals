@@ -8,7 +8,7 @@ namespace pLocals.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountController : ProjectBaseController
     {
 
         private readonly ILogger<AccountController> _logger;

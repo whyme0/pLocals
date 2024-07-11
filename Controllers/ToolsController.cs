@@ -7,7 +7,7 @@ namespace pLocals.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ToolsController : Controller
+    public class ToolsController : ProjectBaseController
     {
         private readonly ILogger<AccountController> _logger;
         private readonly PasswordManager _passwordManager = new();

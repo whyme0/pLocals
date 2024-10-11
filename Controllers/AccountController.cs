@@ -61,7 +61,7 @@ namespace pLocals.Controllers
         {
             if (_accRepository.IsTitleExists(account.Title))
             {
-                ModelState.AddModelError("Title", "This title already exists, please try another");
+                ModelState.AddModelError("Errors", "This title already exists, please try another");
             }
 
             if (!ModelState.IsValid)

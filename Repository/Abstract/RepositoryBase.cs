@@ -1,4 +1,5 @@
-﻿using pLocals.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using pLocals.Data;
 using System.Linq.Expressions;
 
 namespace pLocals.Repository.Abstract
@@ -22,12 +23,12 @@ namespace pLocals.Repository.Abstract
 
         public virtual IQueryable<T> Find(Expression<Func<T, bool>> expression)
         {
-            return context.Set<T>().Where(expression);
+            return context.Set<T>().AsNoTracking().Where(expression);
         }
 
         public virtual IQueryable<T> FindAll()
         {
-            return context.Set<T>();
+            return context.Set<T>().AsNoTracking();
         }
 
         public virtual void Update(T entity)

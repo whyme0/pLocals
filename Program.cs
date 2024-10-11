@@ -26,12 +26,21 @@ try
     // Add services to the container.
     builder.Services.AddControllers();
 
+    // CORS
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+        });
+    });
+
     // Add database settings
     builder.Services.AddDbContext<AppDbContext>(o =>
     {
         o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
-        builder.Services.AddScoped<AccountRepository>();   
+    builder.Services.AddScoped<AccountRepository>();
 
     var app = builder.Build();
     // What to do when applications started
@@ -44,6 +53,7 @@ try
             Log.Information("Databased created");
         }
     });
+    
     // What to do when applictions stopped
     app.Lifetime.ApplicationStopping.Register(() =>
     {
@@ -57,12 +67,15 @@ try
 
     // Configure the HTTP request pipeline.
     app.UseHttpsRedirection();
+
+    // CORS
+    app.UseCors();
+    
     app.UseAuthorization();
 
     app.MapControllers();
 
     app.Run();
-
 }
 catch (Exception e)
 {
@@ -70,7 +83,6 @@ catch (Exception e)
 }
 finally
 {
-    
     Log.Information("End web application.");
     Log.CloseAndFlush();
 }

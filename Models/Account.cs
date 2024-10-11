@@ -3,7 +3,6 @@
     public class Account
     {      
         public int Id { get; set; }
-
         public string Title { get; set; }
         public string NormalizedTitle { get; set; }
         public string Login { get; set; }

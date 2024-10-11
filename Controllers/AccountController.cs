@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using pLocals.Data;
 using pLocals.Models;
 using pLocals.Models.DTOs;
@@ -26,7 +27,10 @@ namespace pLocals.Controllers
         [Route("get")]
         public ICollection<Account> Get()
         {
-            return _accRepository.FindAll().ToList();
+            return _accRepository
+                .FindAll()
+                .OrderByDescending(a => a.Id)
+                .ToList();
         }
 
         [HttpGet]
@@ -41,11 +45,13 @@ namespace pLocals.Controllers
 
         [HttpGet]
         [Route("get/{title}")]
-        public ActionResult<Account> Get(string title)
+        public ActionResult<List<Account>> Get(string title)
         {
-            Account? acc = _accRepository.FindByTitle(title);
-            if (acc == null)
+            var acc = _accRepository.FindAllByTitle(title).ToList();
+            
+            if (acc.Count == 0)
                 return NotFound($"Account with title '{title}' cannot be found");
+            
             return acc;
         }
 
@@ -95,7 +101,8 @@ namespace pLocals.Controllers
 
         [HttpPut]
         [Route("update/{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] UpdateAccountDTO accountDTO)
+        [Consumes("application/json")]
+        public ActionResult Update(int id, [FromBody] UpdateAccountDTO accountDTO)
         {
             Account? a = _accRepository.Find(a => a.Id == id).FirstOrDefault();
 
@@ -103,9 +110,17 @@ namespace pLocals.Controllers
             {
                 return NotFound();
             }
-            else if (accountDTO.Title != null && _accRepository.IsTitleExists(accountDTO.Title) && a.NormalizedTitle != accountDTO.Title.ToLower())
+            if (accountDTO.Title == "" || _accRepository.IsTitleExists(accountDTO.Title))
             {
-                ModelState.AddModelError("Title", "This title already exists, please try another");
+                ModelState.AddModelError("Errors", "This title already exists, please try another");
+            }
+            if (accountDTO.Login == "")
+            {
+                ModelState.AddModelError("Errors", "Login cannot be empty");
+            }
+            if (accountDTO.Password == "")
+            {
+                ModelState.AddModelError("Errors", "Password cannot be empty");
             }
 
             if (!ModelState.IsValid)

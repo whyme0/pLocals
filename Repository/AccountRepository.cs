@@ -11,6 +11,11 @@ namespace pLocals.Repository
         {
         }
 
+        public IEnumerable<Account> FindAllByTitle(string title)
+        {
+            return Find(a => a.NormalizedTitle.Contains(title.ToLower())).ToList();
+        }
+
         public Account? FindByTitle(string title)
         {
             return Find(a => a.NormalizedTitle == title.ToLower()).FirstOrDefault();
@@ -22,9 +27,9 @@ namespace pLocals.Repository
             base.Create(entity);
         }
 
-        public bool IsTitleExists(string title)
+        public bool IsTitleExists(string? title)
         {
-            return FindByTitle(title) != null;
+            return title != null && FindByTitle(title) != null;
         }
     }
 }

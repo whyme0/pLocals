@@ -25,8 +25,9 @@ namespace pLocals.Controllers
 
         [HttpGet]
         [Route("get")]
-        public ICollection<Account> Get()
+        public ICollection<Account> Get() // здесь брекпоинт работает
         {
+            _logger.LogInformation("получаем все учетки");
             return _accRepository
                 .FindAll()
                 .OrderByDescending(a => a.Id)
@@ -57,11 +58,11 @@ namespace pLocals.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<ActionResult> Create([FromBody] CreateAccountDTO account)
+        public async Task<ActionResult> Create([FromBody] CreateAccountDTO account) // здесь брекпоинт не работает
         {
             if (_accRepository.IsTitleExists(account.Title))
             {
-                ModelState.AddModelError("Errors", "This title already exists, please try another");
+                ModelState.AddModelError("Title", "This title already exists, please try another");
             }
 
             if (!ModelState.IsValid)

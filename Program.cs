@@ -5,6 +5,7 @@ using pLocals.Data;
 using pLocals.Models;
 using pLocals.Repository;
 using pLocals.Repository.Abstract;
+using Microsoft.Net.Http.Headers;
 
 // Add logger
 Log.Logger = new LoggerConfiguration()
@@ -24,7 +25,11 @@ try
     builder.Services.AddSerilog();
 
     // Add services to the container.
-    builder.Services.AddControllers();
+    builder.Services.AddControllers()
+        .ConfigureApiBehaviorOptions(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
 
     // CORS
     builder.Services.AddCors(options =>

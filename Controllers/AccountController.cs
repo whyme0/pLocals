@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using pLocals.Data;
 using pLocals.Models;
 using pLocals.Models.DTOs;
@@ -25,13 +24,40 @@ namespace pLocals.Controllers
 
         [HttpGet]
         [Route("get")]
-        public ICollection<Account> Get() // здесь брекпоинт работает
+        public ICollection<Account> GetAll(int pageNumber = 1)
         {
-            _logger.LogInformation("получаем все учетки");
-            return _accRepository
+            int accsPerPage = 15;
+            
+            var accounts = _accRepository
                 .FindAll()
                 .OrderByDescending(a => a.Id)
+                .Skip((pageNumber - 1) * accsPerPage)
+                .Take(accsPerPage)
                 .ToList();
+            
+            return accounts;
+        }
+
+        [HttpGet]
+        [Route("get/{title}")]
+        public ActionResult<ICollection<Account>> Get(string title)
+        {
+            var accounts = _accRepository
+                .FindAllByTitle(title)
+                .OrderByDescending(a => a.Id)
+                .ToList();
+            
+            if (accounts.Count == 0)
+                return NotFound($"Found 0 accounts");
+            
+            return accounts;
+        }
+
+        [HttpGet]
+        [Route("count")]
+        public int GetCount()
+        {
+            return _accRepository.FindAll().Count();
         }
 
         [HttpGet]
@@ -44,21 +70,9 @@ namespace pLocals.Controllers
             return acc;
         }
 
-        [HttpGet]
-        [Route("get/{title}")]
-        public ActionResult<List<Account>> Get(string title)
-        {
-            var acc = _accRepository.FindAllByTitle(title).ToList();
-            
-            if (acc.Count == 0)
-                return NotFound($"Account with title '{title}' cannot be found");
-            
-            return acc;
-        }
-
         [HttpPost]
         [Route("create")]
-        public async Task<ActionResult> Create([FromBody] CreateAccountDTO account) // здесь брекпоинт не работает
+        public async Task<ActionResult> Create([FromBody] CreateAccountDTO account)
         {
             if (_accRepository.IsTitleExists(account.Title))
             {

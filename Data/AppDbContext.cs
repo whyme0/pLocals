@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using pLocals.Controllers;
 using pLocals.Models;
-using System.Reflection.Metadata;
 
 namespace pLocals.Data
 {

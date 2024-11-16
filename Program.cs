@@ -43,22 +43,27 @@ try
     // Add database settings
     builder.Services.AddDbContext<AppDbContext>(o =>
     {
+#if DEBUG
+        o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionForDebug"));
+#else
         o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+#endif
     });
     builder.Services.AddScoped<AccountRepository>();
 
     var app = builder.Build();
-    // What to do when applications started
+
+#if DEBUG
     app.Lifetime.ApplicationStarted.Register(() =>
     {
         using (IServiceScope scope = app.Services.CreateScope())
         {
             AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             dbContext.Database.EnsureCreated();
-            Log.Information("Databased created");
+            Log.Information("Database created");
         }
     });
-    
+
     // What to do when applictions stopped
     app.Lifetime.ApplicationStopping.Register(() =>
     {
@@ -66,9 +71,10 @@ try
         {
             AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             dbContext.Database.EnsureDeleted();
-            Log.Information("Databased deleted");
+            Log.Information("Database deleted");
         }
     });
+# endif
 
     // Configure the HTTP request pipeline.
     app.UseHttpsRedirection();

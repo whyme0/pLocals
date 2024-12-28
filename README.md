@@ -7,14 +7,15 @@ pLocals - is private and secure password storage (yet another), which can be sel
 pLocals is based on the following frameworks and stuff:
 * ASP.NET WEB API (.net 8)
 * PostgreSQL 16
+* Entity Framework Core 8
+* NextJS 15
+* TailwindCSS
 
 # Project architecure schema
 
 ### Models:
 
 `Account` - stores buisness logic such as password and login. Literally one of the most important project element in security terms.
-
-`Note` - addition to `Account`, but dont shouldn't have any significant information.
 
 ### Controllers:
 
@@ -23,9 +24,3 @@ Class `AccountController` stands for:
 - Read `Account` (in methods `Get` and `GetAll`)
 - Update `Account` (cognominal `Update`)
 - Delete `Account` (cognominal `Delete`)
-
-Class `NoteController` stands for (all methods similar to `AccountController` besides it obviously haven't `GetAll` method):
-- Create `Note`
-- Read `Note`
-- Update `Note`
-- Delete `Note`

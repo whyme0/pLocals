@@ -34,7 +34,7 @@ try
     // CORS
     builder.Services.AddCors(options =>
     {
-        options.AddDefaultPolicy(policy =>
+        options.AddPolicy("AllowPort3000", policy =>
         {
             policy.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
         });
@@ -45,7 +45,7 @@ try
     {
 #if DEBUG
         o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionForDebug"));
-#else
+#elif RELEASE
         o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 #endif
     });
@@ -74,13 +74,19 @@ try
             Log.Information("Database deleted");
         }
     });
+# elif RELEASE
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await dbContext.Database.MigrateAsync();
+    }
 # endif
 
     // Configure the HTTP request pipeline.
-    app.UseHttpsRedirection();
+    //app.UseHttpsRedirection();
 
     // CORS
-    app.UseCors();
+    app.UseCors("AllowPort3000");
     
     app.UseAuthorization();
 

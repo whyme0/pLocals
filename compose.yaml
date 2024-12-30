@@ -1,0 +1,61 @@
+services:
+  database:
+    image: postgres
+    container_name: plocals_db
+    environment:
+      - POSTGRES_USER=pguser
+      - POSTGRES_PASSWORD=qwerty12345
+      - POSTGRES_DB=plocals_db
+    expose:
+      - 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - plocals_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pguser"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+    build:
+      context: ./pLocals.Server
+      dockerfile: Dockerfile
+    container_name: plocals.api_server
+    ports:
+      - "5187:5187"
+    environment:
+      - ASPNETCORE_URLS=http://+:5187
+      - ASPNETCORE_ENVIRONMENT=Release
+      - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=plocals_db;User Id=pguser;Password=qwerty12345;
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - plocals_network
+
+  frontend:
+    build:
+      context: ./pLocals.Client
+      dockerfile: Dockerfile
+    container_name: plocals.client_server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:5187
+    networks:
+      - plocals_network
+
+volumes:
+  postgres_data:
+
+networks:
+  plocals_network:
+    driver: bridge

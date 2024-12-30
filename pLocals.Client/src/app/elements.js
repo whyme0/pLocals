@@ -125,7 +125,7 @@ export function Account({account}){
         formData.title = titleInput
       }
 
-      fetch(`http://localhost:5187/account/update/${account.id}`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_FOR_CLIENT}/account/update/${account.id}`, {
         method: 'PUT',
         headers: {
           'Accept': "application/json, text/plain, */*",
@@ -152,7 +152,7 @@ export function Account({account}){
     }
 
     function onDeleteButton(e){
-      fetch(`http://localhost:5187/account/delete/${account.id}`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_FOR_CLIENT}/account/delete/${account.id}`, {
         method: 'DELETE'
       }).then(res => {
         if(res.status==202){
@@ -294,7 +294,7 @@ export function CreateAccountForm(){
       noteText: noteTextInput
     }
 
-    fetch(`http://localhost:5187/account/create/`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_FOR_CLIENT}/account/create/`, {
       method: 'POST',
       headers: {
         'Accept': "application/json, text/plain, */*",
@@ -304,7 +304,7 @@ export function CreateAccountForm(){
     })
     .then(res => {
       if(res.status == 204){
-        window.location.href = `http://localhost:3000/`;
+          window.location.href = `http://localhost:3000`;
       }
       return res.json();
     })

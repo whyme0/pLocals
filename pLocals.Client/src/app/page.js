@@ -3,21 +3,21 @@ import { Account, OpenAccountCreationFormButton, Paging, SearchBox } from "./ele
 
 export default async function Home(props) {
   const searchParams = await props.searchParams;
-  let url = new URL("http:localhost:5187/account/get");
+  let url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/account/get`);
 
   if(searchParams.pageNumber){
     url.searchParams.append("pageNumber", searchParams.pageNumber);
   }
 
   if(searchParams.title){
-    url = new URL(`http:/localhost:5187/account/get/${searchParams.title}`);
+    url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/account/get/${searchParams.title}`);
   }
 
   let response = await fetch(url, {cache:'no-cache'});
   let data = await response.json();
   let accountList = response.status != 200 ? "No accounts found" : data.map((acc)=>{return <Account key={acc.id} account={acc}/>});
 
-  response = await fetch("http://localhost:5187/account/count");
+  response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/count`);
   let numberOfAccounts = await response.json();
   let numberOfPages = numberOfAccounts != 0 ? Math.ceil(numberOfAccounts / 15 ) : 1;
 

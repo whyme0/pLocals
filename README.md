@@ -24,3 +24,16 @@ Class `AccountController` stands for:
 - Read `Account` (in methods `Get` and `GetAll`)
 - Update `Account` (cognominal `Update`)
 - Delete `Account` (cognominal `Delete`)
+
+# Trying out
+## Using docker
+Run `compose.yaml` file in your terminal within directory it located
+```bash
+docker compose up --build -d
+```
+After all containers start working go to `localhost:3000` in your browser
+
+To stop them all use
+```bash
+docker compose down -v
+```

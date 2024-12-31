@@ -10,6 +10,7 @@ pLocals is based on the following frameworks and stuff:
 * Entity Framework Core 8
 * NextJS 15
 * TailwindCSS
+* Docker
 
 # Project architecure schema
 

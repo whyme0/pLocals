@@ -2,10 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
 using pLocals.Data;
-using pLocals.Models;
 using pLocals.Repository;
-using pLocals.Repository.Abstract;
-using Microsoft.Net.Http.Headers;
 
 // Add logger
 Log.Logger = new LoggerConfiguration()

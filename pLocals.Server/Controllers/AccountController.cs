@@ -158,5 +158,15 @@ namespace pLocals.Controllers
 
             return Ok("Updated");
         }
+
+        public ActionResult ExportAccounts()
+        {
+            return NoContent();
+        }
+
+        public ActionResult ImportAccounts()
+        {
+            return NoContent();
+        }
     }
 }

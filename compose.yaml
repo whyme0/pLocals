@@ -3,7 +3,7 @@ services:
     image: postgres
     container_name: plocals_db
     environment:
-      - POSTGRES_USER=pguser
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=qwerty12345
       - POSTGRES_DB=plocals_db
     expose:
@@ -13,7 +13,7 @@ services:
     networks:
       - plocals_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U pguser"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -32,7 +32,7 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:5187
       - ASPNETCORE_ENVIRONMENT=Release
-      - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=plocals_db;User Id=pguser;Password=qwerty12345;
+      - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=plocals_db;User Id=postgres;Password=qwerty12345;
     depends_on:
       database:
         condition: service_healthy

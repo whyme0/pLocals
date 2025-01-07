@@ -24,15 +24,13 @@ namespace pLocals.Controllers
 
         [HttpGet]
         [Route("get")]
-        public ICollection<Account> GetAll(int pageNumber = 1)
-        {
-            int accsPerPage = 15;
-            
+        public ICollection<Account> GetAll(int pageNumber = 1, int perPage = 15)
+        {            
             var accounts = _accRepository
                 .FindAll()
                 .OrderByDescending(a => a.Id)
-                .Skip((pageNumber - 1) * accsPerPage)
-                .Take(accsPerPage)
+                .Skip((pageNumber - 1) * perPage)
+                .Take(perPage)
                 .ToList();
             
             return accounts;
